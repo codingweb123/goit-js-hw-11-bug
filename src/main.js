@@ -5,6 +5,7 @@ import {
 	showLoader,
 	hideLoader,
 } from "./js/render-functions"
+import { Loading } from "notiflix"
 import iziToast from "izitoast"
 import "izitoast/dist/css/iziToast.min.css"
 const form = document.querySelector(".form")
@@ -19,13 +20,11 @@ form.addEventListener("submit", e => {
 		return
 	}
 	clearGallery()
-	showLoader()
+	Loading.dots()
 	getImagesByQuery(query)
 		.then(data => {
 			if (data.data.hits.length > 0) {
-				hideLoader().then(() => {
-					createGallery(data.data.hits)
-				})
+				createGallery(data.data.hits)
 			} else {
 				clearGallery()
 				iziToast.error({
@@ -43,5 +42,5 @@ form.addEventListener("submit", e => {
 			})
 			console.log("🚀 ~ error:", error)
 		})
-		.finally(hideLoader)
+		.finally(Loading.remove)
 })
